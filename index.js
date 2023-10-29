@@ -1,3 +1,4 @@
+const todo_forms = document.querySelector(".form") ;
 const save_button = document.querySelector("#save-btn");
 const input_title = document.querySelector("#title");
 const list = document.querySelector(".list");
@@ -49,8 +50,8 @@ function RenderList(){
    list.innerHTML=""
    
     for (let i = 0 ; i< todo_list.length ; i++){
-        const title = todo_list[i] 
-        RenderItem(title)
+        const titlee = todo_list[i]
+        RenderItem(titlee)
 }
 }
 
@@ -63,10 +64,22 @@ function syncSrorage() {
     localStorage.setItem("my_list", next_list) 
 }
 function load_from_storage(){
-    const ListFromStorage = JSON.parse(localStorage.getItem("my_list")) || []
+    const todos_list_api = "https://jsonplaceholder.typicode.com/todos"
+
+    fetch(todos_list_api).then((response)=>{
+        console.log(response)
+        return response.json()
+    }).then((data)=>{
+        todo_list = data
+        RenderList()
+            
+       
+    })
+    
+    /* const ListFromStorage = JSON.parse(localStorage.getItem("my_list")) || []
     todo_list=ListFromStorage
     RenderList()
-
+ */
     }
 
 
@@ -206,12 +219,19 @@ function onAddItem(){
     }
 }    
 function Events(){
-    save_button.addEventListener("click" , onAddItem)
-    filterse.addEventListener("change" , ()=>{
+    /* save_button.addEventListener("click" , onAddItem) */
+    /* todo_forms.addEventListener("submit", onAddItem) */
+   todo_forms.addEventListener("submit", (eve)=>{
+    eve.preventDefault()
+    console.log("form sent")
+    onAddItem()
+}) 
+   filterse.addEventListener("change" , ()=>{
       
         filterSelect(filterse.value)
         
       })
+    
 }
 //reload
 function init(){
